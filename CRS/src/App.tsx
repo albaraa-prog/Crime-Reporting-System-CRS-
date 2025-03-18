@@ -1,16 +1,15 @@
-import "./App.css";
-
-function App() {
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/Home/HomePage";
+import LoginPage from "./pages/Login/LoginPage";
+import SignupPage from "./pages/Signup/SignupPage";
+const App = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-blue-100">
-      <div className="rounded-lg bg-white p-8 shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800">Hello Tailwind!</h1>
-        <p className="mt-2 text-gray-600">
-          Your Vite + React + TS + Tailwind app is ready.
-        </p>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+    </Routes>
   );
-}
+};
 
 export default App;
