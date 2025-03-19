@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { toast } from "react-toastify";
 
 interface AuthContextType {
   user: User | null;
@@ -33,6 +34,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        toast.success(`Welcome back, ${user.email}!`);
+      } else {
+        toast.info("You have been logged out.");
+      }
       setUser(user);
       setLoading(false);
     });
