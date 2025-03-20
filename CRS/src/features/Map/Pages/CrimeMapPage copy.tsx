@@ -1,3 +1,5 @@
+{
+  /*
 import { LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
@@ -37,6 +39,7 @@ const CrimeMap = () => {
     );
   }, [selectedTypes, crimes]);
 
+  // Function to toggle selected crime types
   const toggleCrimeType = (type: string) => {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
@@ -44,26 +47,34 @@ const CrimeMap = () => {
   };
 
   return (
-    <div className="relative w-full h-screen">
+    <div>
       <CrimeFilter
         selectedTypes={selectedTypes}
         toggleCrimeType={toggleCrimeType}
       />
-      <MapContainer center={defaultCenter} zoom={10} className="h-full w-full">
+      <MapContainer
+        center={defaultCenter}
+        zoom={10}
+        style={{
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+          top: "0",
+          left: "0",
+        }}
+      >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {filteredCrimes.map((crime) => (
           <Marker key={crime.id} position={[crime.latitude, crime.longitude]}>
             <Popup>
-              <div className="p-2 text-sm">
-                <h4 className="font-semibold text-lg">{crime.crime_type}</h4>
-                <p>{crime.report_details}</p>
-                <p className="text-xs text-gray-600">
-                  <strong>Date:</strong> {crime.report_date_time}
-                </p>
-                <p className="text-xs text-gray-600">
-                  <strong>Location:</strong> {crime.latitude}, {crime.longitude}
-                </p>
-              </div>
+              <strong>{crime.crime_type}</strong>
+              <p>{crime.report_details}</p>
+              <p>
+                <strong>Date:</strong> {crime.report_date_time}
+              </p>
+              <p>
+                <strong>Status:</strong> {crime.report_status}
+              </p>
             </Popup>
           </Marker>
         ))}
@@ -73,3 +84,5 @@ const CrimeMap = () => {
 };
 
 export default CrimeMap;
+*/
+}

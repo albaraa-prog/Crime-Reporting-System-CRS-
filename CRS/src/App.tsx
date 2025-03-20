@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "./features/Auth/pages/LoginPage";
 import SignupPage from "./features/Auth/pages/SignupPage";
 import ProtectedRoute from "./features/Auth/routes/ProtectedRoute";
-import HomePage from "./features/Home/pages/HomePage";
+import CrimeMap from "./features/Map/pages/CrimeMapPage";
 import Toast from "./shared/components/UI/ToastMsg";
 
 const App: React.FC = () => {
@@ -16,7 +16,7 @@ const App: React.FC = () => {
           path="/"
           element={
             <ProtectedRoute>
-              <HomePage />
+              <CrimeMap />
             </ProtectedRoute>
           }
         />
