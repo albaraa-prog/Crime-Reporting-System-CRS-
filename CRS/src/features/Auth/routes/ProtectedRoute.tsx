@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../features/Auth/context/AuthContext";
 
 interface ProtectedRouteProps {
   children: ReactNode;

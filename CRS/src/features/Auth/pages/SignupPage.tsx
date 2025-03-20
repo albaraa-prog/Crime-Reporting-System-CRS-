@@ -6,7 +6,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { auth } from "../../../firebase";
+import { auth } from "../../../../firebase";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");

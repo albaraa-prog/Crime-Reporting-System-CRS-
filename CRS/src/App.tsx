@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Toast from "./components/UI/ToastMsg";
-import HomePage from "./pages/Home/HomePage";
-import LoginPage from "./pages/Login/LoginPage";
-import SignupPage from "./pages/Signup/SignupPage";
+import LoginPage from "./features/Auth/pages/LoginPage";
+import SignupPage from "./features/Auth/pages/SignupPage";
+import ProtectedRoute from "./features/Auth/routes/ProtectedRoute";
+import HomePage from "./features/Home/pages/HomePage";
+import Toast from "./shared/components/UI/ToastMsg";
 
 const App: React.FC = () => {
   return (

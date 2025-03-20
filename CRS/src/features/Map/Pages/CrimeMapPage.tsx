@@ -2,7 +2,7 @@ import { LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import CrimeFilter from "./CrimeFilter";
+import CrimeFilter from "../components/CrimeFilter";
 
 // Define the type for a crime object
 interface Crime {
