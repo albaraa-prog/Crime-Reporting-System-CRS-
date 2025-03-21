@@ -1,68 +1,78 @@
-import { LatLngExpression } from "leaflet";
+import { Marker as LeafletMarker } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import CrimeFilter from "../components/CrimeFilter";
-
-// Define the type for a crime object
-interface Crime {
-  id: number;
-  report_details: string;
-  crime_type: string;
-  report_date_time: string;
-  report_status: string;
-  latitude: number;
-  longitude: number;
-}
+import { useCrimes } from "../hooks/useCrimes";
 
 const CrimeMap = () => {
-  const [crimes, setCrimes] = useState<Crime[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [filteredCrimes, setFilteredCrimes] = useState<Crime[]>([]);
+  const { filteredCrimes, selectedTypes, toggleCrimeType, center } =
+    useCrimes();
+  const markerRefs = useRef<{ [key: number]: LeafletMarker | null }>({});
 
-  const defaultCenter: LatLngExpression = [23.588, 58.3829];
-
-  useEffect(() => {
-    fetch("/data/crimes.json")
-      .then((res) => res.json())
-      .then((data) => setCrimes(data.crimes))
-      .catch((err) => console.error("Error fetching crimes:", err));
-  }, []);
-
-  useEffect(() => {
-    setFilteredCrimes(
-      selectedTypes.length === 0
-        ? crimes
-        : crimes.filter((crime) => selectedTypes.includes(crime.crime_type))
-    );
-  }, [selectedTypes, crimes]);
-
-  const toggleCrimeType = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
+  // Crime status color mapping
+  const statusColors: { [key: string]: string } = {
+    Pending: "bg-yellow-500",
+    "En Route": "bg-blue-500",
+    "On Scene": "bg-green-500",
+    "Under Investigation": "bg-purple-500",
+    Resolved: "bg-gray-500",
   };
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-screen h-screen">
+      {/* Filter Navbar at the Top */}
       <CrimeFilter
         selectedTypes={selectedTypes}
         toggleCrimeType={toggleCrimeType}
       />
-      <MapContainer center={defaultCenter} zoom={10} className="h-full w-full">
+
+      {/* Full-Screen Map */}
+      <MapContainer
+        center={center} // Now this uses the center from the hook
+        zoom={10}
+        className="absolute top-0 left-0 w-full h-full z-40"
+      >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+        {/* Crime Markers */}
         {filteredCrimes.map((crime) => (
-          <Marker key={crime.id} position={[crime.latitude, crime.longitude]}>
+          <Marker
+            key={crime.id}
+            position={[crime.latitude, crime.longitude]}
+            ref={(el) => {
+              markerRefs.current[crime.id] = el;
+            }}
+            eventHandlers={{
+              mouseover: () => {
+                // Open the popup when the mouse is over the marker
+                markerRefs.current[crime.id]?.openPopup();
+              },
+              mouseout: () => {
+                // Close the popup when the mouse leaves the marker
+                markerRefs.current[crime.id]?.closePopup();
+              },
+            }}
+          >
             <Popup>
-              <div className="p-2 text-sm">
-                <h4 className="font-semibold text-lg">{crime.crime_type}</h4>
-                <p>{crime.report_details}</p>
+              <div className="p-4 bg-white shadow-md rounded-lg w-64">
+                <h4 className="text-lg font-semibold text-blue-600">
+                  {crime.crime_type}
+                </h4>
+                <p className="text-gray-700">{crime.report_details}</p>
                 <p className="text-xs text-gray-600">
                   <strong>Date:</strong> {crime.report_date_time}
                 </p>
                 <p className="text-xs text-gray-600">
                   <strong>Location:</strong> {crime.latitude}, {crime.longitude}
                 </p>
+                <span
+                  className={`mt-2 inline-block text-white text-xs font-semibold px-3 py-1 rounded-full ${
+                    statusColors[crime.report_status] || "bg-gray-400"
+                  }`}
+                >
+                  {crime.report_status}
+                </span>
               </div>
             </Popup>
           </Marker>
