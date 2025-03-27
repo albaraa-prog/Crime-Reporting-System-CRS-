@@ -10,7 +10,7 @@ interface Crime {
   longitude: number;
 }
 
-export const useCrimes = () => {
+export const useMap = () => {
   const [crimes, setCrimes] = useState<Crime[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [filteredCrimes, setFilteredCrimes] = useState<Crime[]>([]);
@@ -60,5 +60,16 @@ export const useCrimes = () => {
     );
   };
 
-  return { crimes, filteredCrimes, selectedTypes, toggleCrimeType, center };
+  const addCrime = (crime: Crime) => {
+    crimes.push(crime);
+  };
+
+  return {
+    crimes: filteredCrimes,
+    filteredCrimes,
+    selectedTypes,
+    toggleCrimeType,
+    center,
+    addCrime,
+  };
 };
